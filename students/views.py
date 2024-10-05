@@ -1,30 +1,15 @@
 from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Student
 from .serializer import StudentSerializer
-from rest_framework.exceptions import NotFound
 
-
-# class StudentList(GenericAPIView):
-#     serializer_class = StudentSerializer
-
-#     def get(self, request):
-#         students = Student.objects.all()
-#         serializer = self.get_serializer(students, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-
-#     def post(self, request):
-#         serializer = self.get_serializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class StudentList(APIView):
     """List all students or create a new student"""
-    
+
     serializer_class = StudentSerializer
 
     def get(self, request, format=None):
@@ -41,7 +26,6 @@ class StudentList(APIView):
 
 
 class StudentDetail(APIView):
-    
     serializer_class = StudentSerializer
 
     def get_object(self, pk):
@@ -71,7 +55,7 @@ class StudentDetail(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-   
+
     def delete(self, request, pk):
         """
         DELETE a student by ID.

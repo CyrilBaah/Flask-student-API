@@ -35,11 +35,20 @@ The Student Rest API is to perform operations on student data utilizing a Python
 4. Change the env.example file to .env and update it accordingly
 5. Run migrations
 ```sh
+python manage.py makemigrations
 python manage.py migrate
 ```
-5. Start server
+6. Start server
 ```sh
 python manage.py runserver
 ```
-5. Access the [Student API](http://127.0.0.1:8000/api/schema/docs "Student API")
 
+
+# Student API documentation
+Access the [Student API](http://127.0.0.1:8000/api/schema/docs "Student API")
+- POST /api/v1/students/ - Add a new student.
+- GET /api/v1/students/ - Get all students.
+- GET /api/v1/students/<id> - Get a student by ID.
+- PUT /api/v1/students/<id> - Update a student by ID.
+- DELETE /api/v1/students/<id> - Delete a student by ID.
+- GET /api/v1/healthcheck/ - Healthcheck endpoint.

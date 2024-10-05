@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-6h%y$@6af8uqfs6%3%6n6w#g9elw#tx$_&e=)ql5j&9do$rmnu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,7 +37,31 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # "student",
+    "drf_spectacular",
+    "rest_framework",
+    "healthcheck",
 ]
+
+REST_FRAMEWORK = {
+    # API Documentation
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    # Permission
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+    # Pagination
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Student Rest API",
+    "DESCRIPTION": "Perform operations on student data",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # OTHER SETTINGS
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

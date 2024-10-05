@@ -1,6 +1,5 @@
 # Student Rest API
-This project is a Django REST API to manage students with PostgreSQL.
-The Student Rest API is to perform simple operation on student data utilizing a Python backend with Django and Postgres for the database.
+The Student Rest API is to perform operations on student data utilizing a Python backend with Django and Postgres for the database.
 
 
 ## Technology Stack

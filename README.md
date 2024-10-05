@@ -1,1 +1,1 @@
-# Flask-student-API
+# Django-student-API

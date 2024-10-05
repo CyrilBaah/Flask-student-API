@@ -42,3 +42,4 @@ python manage.py migrate
 python manage.py runserver
 ```
 5. Access the [Student API](http://127.0.0.1:8000/api/schema/docs "Student API")
+

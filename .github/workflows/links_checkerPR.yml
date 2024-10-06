@@ -1,56 +1,58 @@
 name: "Check docs links"
 
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:
   push:
     branches:
-      - main  # Trigger on pushes to main branch
+      - main
     paths:
       - "README.md"
       - ".github/workflows/links_checkerPR.yml"
-  pull_request:  # Trigger on pull requests
+  pull_request:
     paths:
       - "README.md"
       - ".github/workflows/links_checkerPR.yml"
 
 jobs:
   linkChecker:
-    if: github.actor != 'dependabot[bot]'  # Skip if the actor is dependabot
+    if: github.actor != 'dependabot[bot]'  # Skip if actor is dependabot
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Link Checker
         id: lychee
-        uses: lycheeverse/lychee-action@v1  # Use the latest version available
+        uses: lycheeverse/lychee-action@v1  # Running Lychee link checker
 
       - name: Read link checker output
         id: read_links
         run: |
-          # Check for errors in the output
-          error_count=$(grep -o "🚫 Errors" ./lychee/out.md | wc -l)
+          error_count=$(grep -c "🚫 Errors" ./lychee/out.md)  # Count errors
+          echo "error_count=$error_count" >> $GITHUB_ENV  # Set error count
           if [ "$error_count" -gt 0 ]; then
             echo "broken_links<<EOF" >> $GITHUB_ENV
-            cat ./lychee/out.md >> $GITHUB_ENV  # Capture output if there are errors
+            cat ./lychee/out.md >> $GITHUB_ENV  # Set broken links detail
             echo "EOF" >> $GITHUB_ENV
-            echo "error_count=$error_count" >> $GITHUB_ENV  # Store the number of errors
           else
             echo "broken_links=All links in the README.md are working fine! 🎉" >> $GITHUB_ENV
-            echo "error_count=0" >> $GITHUB_ENV  # Store the number of errors
           fi
+        shell: bash
+
+      - name: Set output for error count
+        run: echo "::set-output name=error_count::${{ env.error_count }}"
 
       - name: Create or Update Comment - No Broken Links
-        if: env.error_count == '0'  # Check if there are no broken links
+        if: env.error_count == '0'  # Run if there are no broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             **Link Checker Report:**  
             All links in the README.md are working fine! 🎉
-          reactions: hooray
+          reactions: hooray  # React with a 'hooray' if there are no broken links
 
       - name: Create or Update Comment - Summary of Broken Links
-        if: env.error_count != '0'  # Check if there are broken links
+        if: env.error_count != '0'  # Run if there are broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}

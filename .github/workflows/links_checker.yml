@@ -8,10 +8,10 @@ on:
     paths:
       - "README.md"
       - ".github/workflows/links_checker.yml"
-  pull_request:
-    paths:
-      - "README.md"
-      - ".github/workflows/links_checker.yml"
+#   pull_request:
+#     paths:
+#       - "README.md"
+#       - ".github/workflows/links_checker.yml"
 
 jobs:
   linkChecker:

@@ -2,6 +2,12 @@ name: "Check docs links"
 
 on:
   workflow_dispatch:  # Manual trigger
+  push:
+    branches:
+      - main  # Trigger on pushes to main branch
+    paths:
+      - "README.md"
+      - ".github/workflows/links_checkerPR.yml"
   pull_request:  # Trigger on pull requests
     paths:
       - "README.md"
@@ -33,15 +39,24 @@ jobs:
             echo "error_count=0" >> $GITHUB_ENV  # Store the number of errors
           fi
 
-      - name: Create or Update Comment
+      - name: Create or Update Comment - No Broken Links
+        if: env.error_count == '0'  # Check if there are no broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             **Link Checker Report:**  
-            ${{ if env.error_count == '0' }} All links in the README.md are working fine! 🎉
-            ${{ else }} The following links are broken in the README.md:  
+            All links in the README.md are working fine! 🎉
+          reactions: hooray
+
+      - name: Create or Update Comment - Summary of Broken Links
+        if: env.error_count != '0'  # Check if there are broken links
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **Link Checker Report:**  
+            The following links are broken in the README.md:  
             ```markdown
             ${{ env.broken_links }}
-            ```  
-            ${{ endif }}
+            ```

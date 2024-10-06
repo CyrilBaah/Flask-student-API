@@ -1,21 +1,15 @@
 name: "Check docs links"
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - "README.md"
-      - ".github/workflows/links_checker.yml"
-  pull_request:
+  workflow_dispatch:  # Allows for manual triggering of the workflow
+  pull_request:  # Trigger the workflow for pull requests
     paths:
       - "README.md"
       - ".github/workflows/links_checker.yml"
 
 jobs:
   linkChecker:
-    if: github.actor != 'dependabot[bot]'
+    if: github.actor != 'dependabot[bot]'  # Skip if the actor is dependabot
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
@@ -35,13 +29,14 @@ jobs:
         if: steps.lychee.outputs.lychee_exit_code == '0'  # Check if no broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
-            issue-number: ${{ github.event.pull_request.number }}
-            body: |
-                **Link Checker Report:**  
-                All links in the README.md are working fine! 🎉
-            reactions: hooray
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **Link Checker Report:**  
+            All links in the README.md are working fine! 🎉
+          reactions: hooray
 
-      - name: Create or Update Comment
+      - name: Create or Update Comment - Broken Links
+        if: steps.lychee.outputs.lychee_exit_code != '0'  # Check if there are broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -52,5 +47,3 @@ jobs:
             ${{ steps.lychee.outputs.lychee_output }}
             ${{ env.broken_links }}
             ```
-
-      

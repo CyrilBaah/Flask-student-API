@@ -52,3 +52,5 @@ python manage.py runserver
 - DELETE /api/v1/students/<id> - Delete a student by ID.
 - GET /api/v1/healthcheck/ - Healthcheck endpoint.
 
+
+

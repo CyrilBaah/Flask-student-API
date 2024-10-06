@@ -21,12 +21,16 @@ jobs:
       - name: Read broken links
         id: read_links
         run: |
-          echo "broken_links<<EOF" >> $GITHUB_ENV
-          cat ./lychee/out.md >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          if grep -q "Errors" ./lychee/out.md && grep -q "[0-9]*" ./lychee/out.md; then
+            echo "broken_links<<EOF" >> $GITHUB_ENV
+            cat ./lychee/out.md >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          else
+            echo "broken_links=All links in the README.md are working fine! 🎉" >> $GITHUB_ENV
+          fi
 
       - name: Create or Update Comment - No Broken Links
-        if: steps.lychee.outputs.lychee_exit_code == '0'  # Check if no broken links
+        if: env.broken_links == 'All links in the README.md are working fine! 🎉'  # Check if no broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -36,7 +40,7 @@ jobs:
           reactions: hooray
 
       - name: Create or Update Comment - Broken Links
-        if: steps.lychee.outputs.lychee_exit_code != '0'  # Check if there are broken links
+        if: env.broken_links != 'All links in the README.md are working fine! 🎉'  # Check if there are broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -44,6 +48,5 @@ jobs:
             **Link Checker Report:**  
             The following links are broken in the README.md:  
             ```markdown
-            ${{ steps.lychee.outputs.lychee_output }}
             ${{ env.broken_links }}
             ```

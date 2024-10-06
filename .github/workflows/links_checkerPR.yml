@@ -33,6 +33,7 @@ jobs:
             The following links are broken in the README.md:  
             ```markdown
             $(cat ./lychee/out.md)  # Ensure this captures the output correctly
+            $(cat ./lychee/out.md | grep -Eo 'http[s]?://[^ ]+')
             ```
-          reactions: '+1'  # React to the comment with a thumbs up
+          
       

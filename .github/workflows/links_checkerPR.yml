@@ -42,7 +42,7 @@ jobs:
         run: echo "::set-output name=error_count::${{ env.error_count }}"
 
       - name: Create or Update Comment - No Broken Links
-        if: env.error_count == '0'  # Run if there are no broken links
+        if: env.lychee_exit_code == '0'  # Run if there are no broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -52,7 +52,7 @@ jobs:
           reactions: hooray  # React with a 'hooray' if there are no broken links
 
       - name: Create or Update Comment - Summary of Broken Links
-        if: env.error_count != '0'  # Run if there are broken links
+        if: env.lychee_exit_code != '0'  # Run if there are broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}

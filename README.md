@@ -45,7 +45,7 @@ python manage.py runserver
 
 
 # Student API documentation
-Access the [Student API](http://127.0.0.1:8000/api/schema/docs "Student API")
+<!-- Access the [Student API](http://127.0.0.1:8000/api/schema/docs "Student API") -->
 - POST /api/v1/students/ - Add a new student.
 - GET /api/v1/students/ - Get all students.
 - GET /api/v1/students/<id> - Get a student by ID.
@@ -53,9 +53,9 @@ Access the [Student API](http://127.0.0.1:8000/api/schema/docs "Student API")
 - DELETE /api/v1/students/<id> - Delete a student by ID.
 - GET /api/v1/healthcheck/ - Healthcheck endpoint.
 
-Access the [Test Link Checker](http://localhost:8000 "Test Link Checker").
-Access the [Test Link Checker](http://localhost:8001 "Test Link Checker").
+<!-- Access the [Test Link Checker](http://localhost:8000 "Test Link Checker").
+Access the [Test Link Checker](http://localhost:8001 "Test Link Checker"). -->
 <!-- Access the [Test Link Checker](http://localhost:8000 "Test Link Checker"). -->
-Access the [Test Link Checker](http://localhost:8002 "Test Link Checker").
+<!-- Access the [Test Link Checker](http://localhost:8002 "Test Link Checker"). -->
 
 

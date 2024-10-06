@@ -1,8 +1,8 @@
 name: "Check docs links"
 
 on:
-  workflow_dispatch:  # Allows for manual triggering of the workflow
-  pull_request:  # Trigger the workflow for pull requests
+  workflow_dispatch:  # Manual trigger
+  pull_request:  # Trigger on pull requests
     paths:
       - "README.md"
       - ".github/workflows/links_checkerPR.yml"
@@ -12,25 +12,26 @@ jobs:
     if: github.actor != 'dependabot[bot]'  # Skip if the actor is dependabot
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
+      - uses: actions/checkout@v4
 
       - name: Link Checker
         id: lychee
-        uses: lycheeverse/lychee-action@2b973e86fc7b1f6b36a93795fe2c9c6ae1118621
+        uses: lycheeverse/lychee-action@v1  # Use the latest version available
 
-      - name: Read broken links
+      - name: Read link checker output
         id: read_links
         run: |
+          # Check if there are any errors in the output
           if grep -q "Errors" ./lychee/out.md && grep -q "[0-9]*" ./lychee/out.md; then
             echo "broken_links<<EOF" >> $GITHUB_ENV
-            cat ./lychee/out.md >> $GITHUB_ENV
+            cat ./lychee/out.md >> $GITHUB_ENV  # Capture output if there are errors
             echo "EOF" >> $GITHUB_ENV
           else
             echo "broken_links=All links in the README.md are working fine! 🎉" >> $GITHUB_ENV
           fi
 
       - name: Create or Update Comment - No Broken Links
-        if: env.broken_links == 'All links in the README.md are working fine! 🎉'  # Check if no broken links
+        if: env.broken_links == 'All links in the README.md are working fine! 🎉'  # Check if there are no broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}

@@ -2,12 +2,12 @@ name: "Check docs links"
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - "README.md"
-      - ".github/workflows/links_checker.yml"
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - "README.md"
+#       - ".github/workflows/links_checker.yml"
   pull_request:
     paths:
       - "README.md"
@@ -18,26 +18,30 @@ jobs:
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
 
       - name: Link Checker
         id: lychee
-        uses: lycheeverse/lychee-action@v1
+        uses: lycheeverse/lychee-action@2b973e86fc7b1f6b36a93795fe2c9c6ae1118621
 
       - name: Read broken links
         id: read_links
         run: |
-          if grep -q "Errors" ./lychee/out.md && grep -q "[0-9]*" ./lychee/out.md; then
-            broken_links=$(cat ./lychee/out.md)
-            echo "broken_links<<EOF" >> $GITHUB_ENV
-            echo "$broken_links" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-          else
-            echo "broken_links=All links in the README.md are working fine! 🎉" >> $GITHUB_ENV
-          fi
+          echo "broken_links<<EOF" >> $GITHUB_ENV
+          cat ./lychee/out.md >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
-      - name: Create Comment for Broken Links
-        if: env.broken_links != 'All links in the README.md are working fine! 🎉' # Only run if there are broken links
+      - name: Create or Update Comment - No Broken Links
+        if: steps.lychee.outputs.lychee_exit_code == '0'  # Check if no broken links
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+            issue-number: ${{ github.event.pull_request.number }}
+            body: |
+                **Link Checker Report:**  
+                All links in the README.md are working fine! 🎉
+            reactions: hooray
+
+      - name: Create or Update Comment
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -45,14 +49,8 @@ jobs:
             **Link Checker Report:**  
             The following links are broken in the README.md:  
             ```markdown
+            ${{ steps.lychee.outputs.lychee_output }}
             ${{ env.broken_links }}
             ```
 
-      - name: Create Comment for No Broken Links
-        if: env.broken_links == 'All links in the README.md are working fine! 🎉' # Only run if all links are fine
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            **Link Checker Report:**  
-            All links in the README.md are working fine! 🎉
+      

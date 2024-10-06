@@ -54,8 +54,8 @@ Access the [Student API](http://127.0.0.1:8000/api/schema/docs "Student API")
 - GET /api/v1/healthcheck/ - Healthcheck endpoint.
 
 Access the [Test Link Checker](http://localhost:8000 "Test Link Checker").
-Access the [Test Link Checker](http://localhost:8000 "Test Link Checker").
+Access the [Test Link Checker](http://localhost:8001 "Test Link Checker").
 <!-- Access the [Test Link Checker](http://localhost:8000 "Test Link Checker"). -->
-Access the [Test Link Checker](http://localhost:8000 "Test Link Checker").
+Access the [Test Link Checker](http://localhost:8002 "Test Link Checker").
 
 

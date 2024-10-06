@@ -35,10 +35,23 @@ jobs:
             echo "broken_links=All links are working fine!" >> $GITHUB_ENV
           fi
 
-      - name: Create or Update Comment
+      - name: Create Comment for Broken Links
+        if: env.broken_links != 'All links are working fine!' # Only run if there are broken links
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             **Link Checker Report:**  
+            The following links are broken in the README.md:  
+            ```markdown
             ${{ env.broken_links }}
+            ```
+
+      - name: Create Comment for No Broken Links
+        if: env.broken_links == 'All links are working fine!' # Only run if all links are fine
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **Link Checker Report:**  
+            All links in the README.md are working fine! 🎉

@@ -1,31 +1,35 @@
-name: Links Checker
+name: "Check docs links"
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
   push:
     branches:
       - main
-  schedule:
-    - cron: "00 18 * * *"
+    paths:
+      - "README.md"
+      - ".github/workflows/links_checker.yml"
+  pull_request:
+    paths:
+      - "README.md"
+      - ".github/workflows/links_checker.yml"
 
 jobs:
   linkChecker:
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
 
       - name: Link Checker
         id: lychee
-        uses: lycheeverse/lychee-action@v1
-        with:
-          args: README.md --verbose --no-progress --output ./lychee/out.md
+        uses: lycheeverse/lychee-action@2b973e86fc7b1f6b36a93795fe2c9c6ae1118621
 
       - name: Create Issue From File
-        if: steps.lychee.outputs.exit_code != '0'
-        uses: peter-evans/create-issue-from-file@v5
+        if: env.lychee_exit_code != 0
+        uses: peter-evans/create-issue-from-file@e8ef132d6df98ed982188e460ebb3b5d4ef3a9cd
         with:
-          title: 'Link Checker Report'
+          title: Link Checker Report
           content-filepath: ./lychee/out.md
-          labels: report, automated issue
+          labels: |
+            report
+            automated-issue

@@ -45,7 +45,6 @@ python manage.py runserver
 
 
 # Student API documentation
-Access the [Student API](http://127.0.0.1:8000/api/schema/docs "Student API")
 - POST /api/v1/students/ - Add a new student.
 - GET /api/v1/students/ - Get all students.
 - GET /api/v1/students/<id> - Get a student by ID.

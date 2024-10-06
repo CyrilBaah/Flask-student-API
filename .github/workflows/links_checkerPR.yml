@@ -2,12 +2,12 @@ name: "Check docs links"
 
 on:
   workflow_dispatch:
-#   push:
-#     branches:
-#       - main
-#     paths:
-#       - "README.md"
-#       - ".github/workflows/links_checker.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "README.md"
+      - ".github/workflows/links_checker.yml"
   pull_request:
     paths:
       - "README.md"

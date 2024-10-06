@@ -21,33 +21,27 @@ jobs:
       - name: Read link checker output
         id: read_links
         run: |
-          # Check if there are any errors in the output
-          if grep -q "Errors" ./lychee/out.md && grep -q "[0-9]*" ./lychee/out.md; then
+          # Check for errors in the output
+          error_count=$(grep -o "🚫 Errors" ./lychee/out.md | wc -l)
+          if [ "$error_count" -gt 0 ]; then
             echo "broken_links<<EOF" >> $GITHUB_ENV
             cat ./lychee/out.md >> $GITHUB_ENV  # Capture output if there are errors
             echo "EOF" >> $GITHUB_ENV
+            echo "error_count=$error_count" >> $GITHUB_ENV  # Store the number of errors
           else
             echo "broken_links=All links in the README.md are working fine! 🎉" >> $GITHUB_ENV
+            echo "error_count=0" >> $GITHUB_ENV  # Store the number of errors
           fi
 
-      - name: Create or Update Comment - No Broken Links
-        if: env.broken_links == 'All links in the README.md are working fine! 🎉'  # Check if there are no broken links
+      - name: Create or Update Comment
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             **Link Checker Report:**  
-            All links in the README.md are working fine! 🎉
-          reactions: hooray
-
-      - name: Create or Update Comment - Broken Links
-        if: env.broken_links != 'All links in the README.md are working fine! 🎉'  # Check if there are broken links
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            **Link Checker Report:**  
-            The following links are broken in the README.md:  
+            ${{ if env.error_count == '0' }} All links in the README.md are working fine! 🎉
+            ${{ else }} The following links are broken in the README.md:  
             ```markdown
             ${{ env.broken_links }}
-            ```
+            ```  
+            ${{ endif }}

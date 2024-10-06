@@ -31,17 +31,24 @@ jobs:
           cat ./lychee/out.md >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Create or Update Comment - No Broken Links
+        if: steps.lychee.outputs.lychee_exit_code == '0'  # Check if no broken links
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+            issue-number: ${{ github.event.pull_request.number }}
+            body: |
+                **Link Checker Report:**  
+                All links in the README.md are working fine! 🎉
+            reactions: hooray
+
       - name: Create or Update Comment
         uses: peter-evans/create-or-update-comment@v4
         with:
-          issue-number: ${{ github.event.pull_request.number }}  # Dynamically use the pull request number
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
             **Link Checker Report:**  
             The following links are broken in the README.md:  
             ```markdown
-            $(cat ./lychee/out.md)  # Ensure this captures the output correctly
-            $(cat ./lychee/out.md | grep -Eo 'http[s]?://[^ ]+')
-            content-filepath: ./lychee/out.md
             ${{ steps.lychee.outputs.lychee_output }}
             ${{ env.broken_links }}
             ```

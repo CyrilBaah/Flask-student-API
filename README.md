@@ -44,13 +44,12 @@ python manage.py runserver
 ```
 
 
-# Student API documentation
+# Student API  documentation | 
+Access the API via [ URL](http://localhost:8000/api/schema/docs#/ "URL") 
 - POST /api/v1/students/ - Add a new student.
 - GET /api/v1/students/ - Get all students.
 - GET /api/v1/students/<id> - Get a student by ID.
 - PUT /api/v1/students/<id> - Update a student by ID.
 - DELETE /api/v1/students/<id> - Delete a student by ID.
 - GET /api/v1/healthcheck/ - Healthcheck endpoint.
-
-
 

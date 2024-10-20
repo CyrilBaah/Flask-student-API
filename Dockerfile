@@ -25,11 +25,6 @@ COPY . ${PROJECT}
 
 EXPOSE 8000
 
-# RUN python manage.py makemigrations
-# RUN python manage.py migrate
-
-RUN gunicorn base.wsgi:application --workers 3 --bind [::]:8000 
-
-# RUN chmod +x ./entrypoint.sh
-# ENTRYPOINT ["sh", "/home/app/entrypoint.sh"]
+RUN chmod +x ./entrypoint.sh
+ENTRYPOINT ["sh", "/home/app/entrypoint.sh"]
 

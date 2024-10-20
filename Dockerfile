@@ -19,7 +19,6 @@ RUN apt-get install -y --no-install-recommends gcc libc-dev python3-dev
 RUN pip install --upgrade pip
 COPY ./requirements.txt ${PROJECT}/requirements.txt
 RUN pip install -r ${PROJECT}/requirements.txt
-RUN pip install gunicorn
 
 # Copy project to working directory
 COPY . ${PROJECT}

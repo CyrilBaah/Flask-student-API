@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: student-api
+  template:
+    metadata:
+      labels:
+        app: student-api
+    spec:
+      containers:
+      - name: student-api
+        image: cyrilbaah/student-api
+        resources:
+          limits:
+            memory: "1.5Gi"
+            cpu: "1"
+          requests:
+            memory: "600Mi"
+            cpu: "750m"
+        ports:
+          - containerPort: 8000
+        env:
+          - name: SECRET_KEY
+            value: "django-insecure-6h%y$@6af8uqfs6%3%6n6w#g9elw#tx$_&e=)ql5j&9do$rmnu"
+          - name: DEBUG
+            value: "True"
+          - name: USE_S3_BUCKET
+            value: "False"
+          - name: DB_TYPE
+            value: postgres
+          - name: DB_HOST
+            value: db
+          - name: DB_USER
+            value: postgres
+          - name: DB_PASSWORD
+            value: password
+          - name: DB_NAME
+            value: postgres
+          - name: DB_PORT
+            value: "5432"
+                 
+        

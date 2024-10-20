@@ -8,7 +8,7 @@ PORT := 8000
 
 create-cluster:
 	@echo "Creating Kind cluster..."
-	kind create cluster --config config.yml --name $(CLUSTER_NAME)
+	kind create cluster --config ./ops/kind/config.yml --name $(CLUSTER_NAME)
 
 get-cluster:
 	@echo "Getting Kind clusters..."
@@ -84,6 +84,14 @@ clean:
 	docker stop $(shell docker ps -aq) || true
 	docker rm $(shell docker ps -aq) || true
 	docker rmi $(shell docker images -aq) || true
+
+decode:
+	@echo "Decode the secret..."
+	@echo "$ echo -n 'cGFzc3dvcmQ=' | base64 --decode"
+
+encode:
+	@echo "Encode the secret..."
+	@echo "$ echo -n 'password' | base64"
 
 help:
 	@echo "Available targets:"

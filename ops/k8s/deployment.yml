@@ -27,8 +27,8 @@ spec:
         env:
           - name: SECRET_KEY
             valueFrom:
-              configMapKeyRef:
-                name: student-api-configmap
+              secretKeyRef:
+                name: student-api-secret
                 key: SECRET_KEY
           - name: DEBUG
             valueFrom:
@@ -42,13 +42,18 @@ spec:
                 key: USE_S3_BUCKET
           - name: DB_TYPE
             valueFrom:
-              secretKeyRef:
-                name: student-api-secret
+              configMapKeyRef:
+                name: student-api-configmap
                 key: DB_TYPE
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: student-api-configmap
+                key: DB_HOST
           - name: DB_USER
             valueFrom:
-              secretKeyRef:
-                name: student-api-secret
+              configMapKeyRef:
+                name: student-api-configmap
                 key: DB_USER
           - name: DB_PASSWORD
             valueFrom:
@@ -57,17 +62,13 @@ spec:
                 key: DB_PASSWORD
           - name: DB_NAME
             valueFrom:
-              secretKeyRef:
-                name: student-api-secret
+              configMapKeyRef:
+                name: student-api-configmap
                 key: DB_NAME
-          - name: DB_HOST
-            valueFrom:
-              secretKeyRef:
-                name: student-api-secret
-                key: DB_HOST
           - name: DB_PORT
             valueFrom:
-              secretKeyRef:
-                name: student-api-secret
-                key: DB_PORT         
-        
+              configMapKeyRef:
+                name: student-api-configmap
+                key: DB_PORT
+
+         

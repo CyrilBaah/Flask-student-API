@@ -53,3 +53,28 @@ Access the API via [ URL](http://localhost:8000/api/schema/docs#/ "URL")
 - DELETE /api/v1/students/<id> - Delete a student by ID.
 - GET /api/v1/healthcheck/ - Healthcheck endpoint.
 
+# Kubebenetes Dashboard
+1. Install
+```sh
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+```
+2. Expose
+```sh
+kubectl proxy
+``
+```sh
+kubectl -n kubernetes-dashboard create token admin-user
+```
+3. Authentication
+```sh
+kubectl apply -f ops/k8s/service-account/dashboard-adminuser.yml
+```
+4. Generate token
+```sh
+kubectl -n kubernetes-dashboard create token admin-user
+```
+Copy the generated token and paste it into the dashboard
+5. Access the Dashboard
+```sh
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+```

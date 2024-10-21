@@ -1,7 +1,7 @@
 # Define variables
 CLUSTER_NAME := dev
-IMAGE_NAME := studentapi
-CONTAINER_NAME := studentapi
+IMAGE_NAME := student-api
+CONTAINER_NAME := student-api
 PORT := 8000
 
 .PHONY: create-cluster get-cluster set-context delete-cluster install-nginxingresscontroller get-nginxingress get-logs cluster-info get-nodes get-pods expose-frontend build run stop remove remove-image ps ps-all images exec clean help
@@ -23,7 +23,7 @@ delete-cluster:
 	kind delete cluster --name $(CLUSTER_NAME)
 
 push-image:
-	docker push cyrilbaah/studentapi:latest
+	docker push cyrilbaah/student-api:latest
 
 install-nginxingresscontroller:
 	@echo "Install NGINX Ingress Controller..."

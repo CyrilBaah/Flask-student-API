@@ -87,11 +87,11 @@ clean:
 
 decode:
 	@echo "Decode the secret..."
-	@echo "$ echo -n 'cGFzc3dvcmQ=' | base64 --decode"
+	@echo "$ echo -n 'decodeyourwordhere' | base64 --decode"
 
 encode:
 	@echo "Encode the secret..."
-	@echo "$ echo -n 'password' | base64"
+	@echo "$ echo -n 'encodeyourwordhere' | base64"
 
 help:
 	@echo "Available targets:"
